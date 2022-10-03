@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:kin_app_sample/homePage.dart';
+import 'package:kin_app_sample/constants.dart';
+import 'package:kin_app_sample/home-page.dart';
 import 'package:kin_app_sample/kinetic_controller.dart';
-import 'package:kinetic/interfaces/kinetic_sdk_config.dart';
+import 'package:kin_app_sample/screens/view_seed.dart';
+import 'package:kin_app_sample/screens/welcom.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => KineticController(), child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -32,15 +35,27 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          // primarySwatch: Colors.black,
-          ),
-      home: ChangeNotifierProvider(
-        create: (context) => KineticController(),
-        child: MyHomePage(
-          kineticController: controller,
-        ),
-      ),
+          primarySwatch: const MaterialColor(0xff6F41E7, <int, Color>{
+            50: kPurpleKin,
+            100: kPurpleKin,
+            200: kPurpleKin,
+            300: kPurpleKin,
+            400: kPurpleKin,
+            500: kPurpleKin,
+            600: kPurpleKin,
+            700: kPurpleKin,
+            800: kPurpleKin,
+            900: kPurpleKin,
+          }),
+          fontFamily: 'Roboto'),
+      routes: {
+        MyHomePage.pageId: (_) => MyHomePage(),
+        Welcom.pageId: (_) => const Welcom(),
+        ShowSeed.pageId: (_) => const ShowSeed(),
+      },
+      initialRoute: Welcom.pageId,
     );
   }
 }

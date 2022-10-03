@@ -29,6 +29,10 @@ class KineticController extends ChangeNotifier {
   Transaction? get currentTransaction => _currentTransaction ?? null;
   RequestAirdropResponse? get requestAirdropResponse =>
       _requestAirdropResponse ?? null;
+  List<String> get kp {
+    if (_kp == null) getKeyPair();
+    return _kp!.mnemonic!.split(' ');
+  }
 
   // String mint = "KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX";
   String accountBob = "BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y";
@@ -71,6 +75,9 @@ class KineticController extends ChangeNotifier {
 
   //Create user account
   Future<Transaction> createAccount() async {
+    if (_sdk == null) {
+      await initialize();
+    }
     await _generateKeyPair();
     CreateAccountOptions options = CreateAccountOptions(
       owner: _kp!,
@@ -78,10 +85,9 @@ class KineticController extends ChangeNotifier {
       referenceId: 'dart',
       referenceType: 'test',
     );
-    if (_sdk == null) {
-      initialize();
-    }
+
     Transaction? transaction = await _sdk!.createAccount(options);
+
     if (transaction == null) {
       throw Exception('ERROR_CREATING_ACCOUNT');
     } else {
@@ -93,11 +99,9 @@ class KineticController extends ChangeNotifier {
   getBalance() async {
     if (_sdk == null) {
       await initialize();
-      // await getBalance();
     }
     if (_kp == null) {
       await getKeyPair();
-      // await getBalance();
     }
     if (_sdk != null && _kp != null) {
       GetBalanceOptions options = GetBalanceOptions(account: _kp!.publicKey);
@@ -110,11 +114,9 @@ class KineticController extends ChangeNotifier {
   getHistory() async {
     if (_sdk == null) {
       await initialize();
-      // await getBalance();
     }
     if (_kp == null) {
       await getKeyPair();
-      // await getBalance();
     }
     if (_sdk != null && _kp != null) {
       GetHistoryOptions options = GetHistoryOptions(account: _kp!.publicKey);
@@ -134,11 +136,9 @@ class KineticController extends ChangeNotifier {
   ) async {
     if (_sdk == null) {
       await initialize();
-      // await transfer(amount, destinationAddress);
     }
     if (_kp == null) {
       await getKeyPair();
-      // await transfer(amount, destinationAddress);
     }
     if (_sdk != null && _kp != null) {
       MakeTransferOptions options = MakeTransferOptions(
@@ -168,11 +168,9 @@ class KineticController extends ChangeNotifier {
   fund(int amount) async {
     if (_sdk == null) {
       await initialize();
-      // await fund(amount);
     }
     if (_kp == null) {
       await getKeyPair();
-      // await fund(amount);
     }
     if (_sdk != null && _kp != null) {
       RequestAirdropOptions options = RequestAirdropOptions(

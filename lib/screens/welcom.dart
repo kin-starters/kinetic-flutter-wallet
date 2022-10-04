@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kin_app_sample/constants.dart';
 import 'package:kin_app_sample/kinetic_controller.dart';
+import 'package:kin_app_sample/screens/fill_up_seed.dart';
 import 'package:kin_app_sample/screens/view_seed.dart';
 import 'package:provider/provider.dart';
 
@@ -83,7 +84,9 @@ class Welcom extends StatelessWidget {
                               },
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(context, FillUpSeed.pageId);
+                          },
                           child: const SizedBox(
                             width: 152,
                             height: 53,

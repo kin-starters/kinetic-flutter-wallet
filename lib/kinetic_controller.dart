@@ -21,10 +21,10 @@ class KineticController extends ChangeNotifier {
   List<HistoryResponse>? _history;
   Transaction? _currentTransaction;
   RequestAirdropResponse? _requestAirdropResponse;
-
+  SharedPreferences? prefs;
   //getters
   KineticSdk? get sdk => _sdk ?? null;
-  BalanceResponse? get balanceResponse => _balanceResponse ?? null;
+  BalanceResponse? get balanceResponse => _balanceResponse;
   List<HistoryResponse>? get history => _history ?? null;
   Transaction? get currentTransaction => _currentTransaction ?? null;
   RequestAirdropResponse? get requestAirdropResponse =>
@@ -32,6 +32,10 @@ class KineticController extends ChangeNotifier {
   List<String> get kp {
     if (_kp == null) getKeyPair();
     return _kp!.mnemonic!.split(' ');
+  }
+
+  Keypair? get publicKey {
+    return _kp ?? null;
   }
 
   // String mint = "KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX";
@@ -48,6 +52,10 @@ class KineticController extends ChangeNotifier {
     _sdk = await KineticSdk.setup(_kineticSdkConfig!);
     if (_sdk!.config == null) {
       throw Exception("APP_CONFIG_NULL");
+    }
+    _kp = await _getCachedKeyPair();
+    if (_kp != null) {
+      await getBalance();
     }
     notifyListeners();
   }
@@ -95,6 +103,15 @@ class KineticController extends ChangeNotifier {
     }
   }
 
+  //generate keypair from mnemonic
+  Future<Keypair> generateKeyPairFromMnemonic(String mnemonic) async {
+    final Keypair userKeyPair = await Keypair.fromMnemonic(mnemonic);
+    _kp = userKeyPair;
+    notifyListeners();
+    _chacheKeyPair(userKeyPair);
+    return userKeyPair;
+  }
+
   //Get user balance
   getBalance() async {
     if (_sdk == null) {
@@ -130,10 +147,7 @@ class KineticController extends ChangeNotifier {
   }
 
   //Make a transfer
-  transfer(
-    int amount,
-    // String destinationAddress
-  ) async {
+  transfer(int amount, String destinationAddress) async {
     if (_sdk == null) {
       await initialize();
     }
@@ -143,7 +157,7 @@ class KineticController extends ChangeNotifier {
     if (_sdk != null && _kp != null) {
       MakeTransferOptions options = MakeTransferOptions(
         amount: amount.toString(),
-        destination: accountBob,
+        destination: destinationAddress,
         commitment: MakeTransferRequestCommitmentEnum.finalized,
         owner: _kp!,
         referenceId: "our-ref-id",

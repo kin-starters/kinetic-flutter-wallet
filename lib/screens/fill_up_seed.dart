@@ -18,6 +18,7 @@ class FillUpSeed extends StatelessWidget {
         backgroundColor: kBcgrndColor,
         elevation: 0,
         centerTitle: true,
+        automaticallyImplyLeading: false,
         title: const Text(
           "Fill Up Mnemonic",
           style: TextStyle(

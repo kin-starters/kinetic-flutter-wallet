@@ -17,6 +17,7 @@ class ShowSeed extends StatelessWidget {
         backgroundColor: kBcgrndColor,
         elevation: 0,
         centerTitle: true,
+        automaticallyImplyLeading: false,
         title: const Text(
           "Mnemonic",
           style: TextStyle(

@@ -53,10 +53,13 @@ class KineticController extends ChangeNotifier {
     if (_sdk!.config == null) {
       throw Exception("APP_CONFIG_NULL");
     }
-    _kp = await _getCachedKeyPair();
-    if (_kp != null) {
-      await getBalance();
-    }
+    try {
+      _kp = await _getCachedKeyPair();
+      if (_kp != null) {
+        await getBalance();
+      }
+    } catch (e) {}
+
     notifyListeners();
   }
 
@@ -100,6 +103,17 @@ class KineticController extends ChangeNotifier {
       throw Exception('ERROR_CREATING_ACCOUNT');
     } else {
       return transaction;
+    }
+  }
+
+  //Delete account
+  deleteWallet() async {
+    final prefs = await SharedPreferences.getInstance();
+    final deleted = await prefs.remove('KEYPAIR');
+    if (deleted == true) {
+      return true;
+    } else {
+      throw Exception('Cache exception');
     }
   }
 

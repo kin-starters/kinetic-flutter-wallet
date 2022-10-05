@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:kin_app_sample/constants.dart';
 import 'package:kin_app_sample/kinetic_controller.dart';
 import 'package:kin_app_sample/screens/welcom.dart';
+import 'package:kinetic/generated/lib/api.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,24 +31,30 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> checkIsWalletAvailable() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final available = prefs.getString("KEYPAIR");
-    if (available != "" && available != null) {
-    } else {
-      Future.delayed(Duration.zero).then((value) {
-        Navigator.pushReplacementNamed(
-          context,
-          Welcom.pageId,
-        );
-      });
-    }
+    try {
+      final available = prefs.getString("KEYPAIR");
+      if (available != "" && available != null) {
+      } else {
+        Future.delayed(Duration.zero).then((value) {
+          Navigator.pushReplacementNamed(
+            context,
+            Welcom.pageId,
+          );
+        });
+      }
+    } catch (e) {}
   }
 
   _InitialiseHome() async {
     await controller.getBalance().then((_) {
-      setState(() {
-        balance = controller.balanceResponse!.balance;
-        publicKey = controller.publicKey!.publicKey;
-      });
+      if (mounted) {
+        setState(() {
+          balance = (int.parse(controller.balanceResponse!.balance) / 100000)
+              .toString();
+
+          publicKey = controller.publicKey!.publicKey;
+        });
+      }
     });
   }
 
@@ -56,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kBcgrndColor,
+        automaticallyImplyLeading: false,
         elevation: 0,
         centerTitle: true,
         title: const Text(
@@ -70,8 +78,40 @@ class _MyHomePageState extends State<MyHomePage> {
         // kineticController.getBalance();
 
         return Column(children: [
-          const SizedBox(
+          SizedBox(
             height: 36,
+            width: 357,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 14),
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: const Icon(Icons.exit_to_app_outlined),
+                    onPressed: () async {
+                      showLoadingDialog(context);
+                      try {
+                        final delete = await kineticController.deleteWallet();
+                        if (delete == true) {
+                          Future.delayed(Duration.zero).then((value) {
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, Welcom.pageId, (route) => false);
+                          });
+                        } else {
+                          Future.delayed(Duration.zero).then((value) {
+                            showErrorDialog(context, 'Error deleting wallet');
+                          });
+                        }
+                      } catch (e) {
+                        showErrorDialog(context, e.toString());
+                      }
+                    },
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
           ),
           Stack(
             children: [
@@ -125,15 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               color: kDarkGrey),
                         ),
                         Text(
-                          kineticController.balanceResponse != null
-                              ? kineticController.balanceResponse!.balance !=
-                                          "" &&
-                                      kineticController
-                                              .balanceResponse!.balance.length >
-                                          3
-                                  ? "${kineticController.balanceResponse!.balance.substring(0, 3)},${kineticController.balanceResponse!.balance.substring(3)}"
-                                  : kineticController.balanceResponse!.balance
-                              : balance,
+                          _parseBalence(kineticController.balanceResponse),
                           style: const TextStyle(
                               fontSize: 35.0,
                               fontWeight: FontWeight.w600,
@@ -368,5 +400,22 @@ class _MyHomePageState extends State<MyHomePage> {
         ]);
       })),
     );
+  }
+
+  _parseBalence(BalanceResponse? thisBalance) {
+    if (thisBalance == null) {
+      if (balance != "") {
+        if (balance[0] != '0') {
+          return (int.parse(balance) / 100000).toString();
+        }
+      }
+      return balance;
+    } else {
+      if (thisBalance.balance[0] != '0') {
+        return (int.parse(thisBalance.balance) / 100000).toString();
+      } else {
+        return thisBalance;
+      }
+    }
   }
 }

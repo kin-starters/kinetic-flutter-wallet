@@ -412,7 +412,7 @@ class _MyHomePageState extends State<MyHomePage> {
       return balance;
     } else {
       if (thisBalance.balance[0] != '0') {
-        return (double.parse(thisBalance.balance)).toString();
+        return (double.parse(thisBalance.balance) / 100000).toString();
       } else {
         return thisBalance.balance;
       }

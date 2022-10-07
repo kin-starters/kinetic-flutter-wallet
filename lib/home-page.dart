@@ -406,15 +406,15 @@ class _MyHomePageState extends State<MyHomePage> {
     if (thisBalance == null) {
       if (balance != "") {
         if (balance[0] != '0') {
-          return (int.parse(balance) / 100000).toString();
+          return (double.parse(balance)).toString();
         }
       }
       return balance;
     } else {
       if (thisBalance.balance[0] != '0') {
-        return (int.parse(thisBalance.balance) / 100000).toString();
+        return (double.parse(thisBalance.balance)).toString();
       } else {
-        return thisBalance;
+        return thisBalance.balance;
       }
     }
   }

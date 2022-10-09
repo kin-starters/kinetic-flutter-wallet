@@ -110,6 +110,12 @@ class KineticController extends ChangeNotifier {
   deleteWallet() async {
     final prefs = await SharedPreferences.getInstance();
     final deleted = await prefs.remove('KEYPAIR');
+    //reset all values
+    _balanceResponse = null;
+    _kp = null;
+    _history = null;
+    _currentTransaction = null;
+    _requestAirdropResponse = null;
     if (deleted == true) {
       return true;
     } else {

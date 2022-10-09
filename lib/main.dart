@@ -6,7 +6,6 @@ import 'package:kin_app_sample/screens/fill_up_seed.dart';
 import 'package:kin_app_sample/screens/view_seed.dart';
 import 'package:kin_app_sample/screens/welcom.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   runApp(ChangeNotifierProvider(

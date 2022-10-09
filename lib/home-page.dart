@@ -75,8 +75,6 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: kBcgrndColor,
       body: Center(child:
           Consumer<KineticController>(builder: (_, kineticController, __) {
-        // kineticController.getBalance();
-
         return Column(children: [
           SizedBox(
             height: 36,
@@ -90,22 +88,24 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: EdgeInsets.zero,
                     icon: const Icon(Icons.exit_to_app_outlined),
                     onPressed: () async {
-                      showLoadingDialog(context);
-                      try {
-                        final delete = await kineticController.deleteWallet();
-                        if (delete == true) {
-                          Future.delayed(Duration.zero).then((value) {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, Welcom.pageId, (route) => false);
-                          });
-                        } else {
-                          Future.delayed(Duration.zero).then((value) {
-                            showErrorDialog(context, 'Error deleting wallet');
-                          });
+                      _handleExitButton(() async {
+                        showLoadingDialog(context);
+                        try {
+                          final delete = await kineticController.deleteWallet();
+                          if (delete == true) {
+                            Future.delayed(Duration.zero).then((value) {
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, Welcom.pageId, (route) => false);
+                            });
+                          } else {
+                            Future.delayed(Duration.zero).then((value) {
+                              showErrorDialog(context, 'Error deleting wallet');
+                            });
+                          }
+                        } catch (e) {
+                          showErrorDialog(context, e.toString());
                         }
-                      } catch (e) {
-                        showErrorDialog(context, e.toString());
-                      }
+                      });
                     },
                     color: Colors.white,
                   ),
@@ -417,5 +417,64 @@ class _MyHomePageState extends State<MyHomePage> {
         return thisBalance.balance;
       }
     }
+  }
+
+  _handleExitButton(Function callback) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: kGrey,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.0))),
+            title: const Text(
+              "Wallet Exit",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white),
+            ),
+            actions: [
+              const Center(
+                child: Text(
+                  "Are you sure you want to exit your wallet?",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
+                ),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        callback();
+                      },
+                      child: const Text("Exit Wallet",
+                          style: TextStyle(
+                              fontSize: 17.0,
+                              fontWeight: FontWeight.w600,
+                              color: kPurpleKin))),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Cancel",
+                        style: TextStyle(
+                            fontSize: 17.0,
+                            fontWeight: FontWeight.w600,
+                            color: kPurpleKin)),
+                  ),
+                ],
+              )
+            ],
+          );
+        });
   }
 }

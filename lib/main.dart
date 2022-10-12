@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
               800: kPurpleKin,
               900: kPurpleKin,
             }),
-            fontFamily: 'Roboto'),
+            fontFamily: 'NeueHaasDisplayBold'),
         routes: {
           MyHomePage.pageId: (_) => const MyHomePage(),
           Welcom.pageId: (_) => const Welcom(),

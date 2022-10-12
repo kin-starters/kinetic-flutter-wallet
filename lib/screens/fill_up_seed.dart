@@ -112,22 +112,13 @@ class FillUpSeed extends StatelessWidget {
                             ));
                           }
                         },
-                        child: Container(
-                          width: 152,
-                          height: 53,
-                          decoration: const BoxDecoration(
-                              color: kPurpleKin,
-                              //  border: Border.all(width: 2.2, color: kPurpleKin),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12))),
-                          child: const Center(
-                            child: Text(
-                              "Import Wallet",
-                              style: TextStyle(
-                                  fontSize: 17.0,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white),
-                            ),
+                        child: const Center(
+                          child: Text(
+                            "Import Wallet",
+                            style: TextStyle(
+                                fontSize: 17.0,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white),
                           ),
                         ),
                       );

@@ -161,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
-                              fontFamily: 'Roboto',
+                              fontFamily: 'NeueHaasDisplayBold',
                               color: kDarkGrey),
                         ),
                         Text(
@@ -169,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: const TextStyle(
                               fontSize: 35.0,
                               fontWeight: FontWeight.w600,
-                              fontFamily: 'Roboto',
+                              fontFamily: 'NeueHaasDisplayBold',
                               color: Colors.black),
                         ),
                       ],
@@ -235,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Text(
                         "Fund Wallet",
                         style: TextStyle(
-                            fontFamily: 'Roboto',
+                            fontFamily: 'NeueHaasDisplayBold',
                             fontSize: 17,
                             fontWeight: FontWeight.w400,
                             color: Colors.white),
@@ -352,7 +352,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Text(
                         "Transfer",
                         style: TextStyle(
-                            fontFamily: 'Roboto',
+                            fontFamily: 'NeueHaasDisplayBold',
                             fontSize: 17,
                             fontWeight: FontWeight.w400,
                             color: Colors.white),

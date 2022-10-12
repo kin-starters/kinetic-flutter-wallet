@@ -26,7 +26,9 @@ class SeedText extends StatelessWidget {
           phrase,
           textAlign: TextAlign.center,
           style: const TextStyle(
-              fontSize: 17, color: Colors.white, fontFamily: 'Roboto'),
+              fontSize: 17,
+              color: Colors.white,
+              fontFamily: 'NeueHaasDisplayBold'),
         ),
       ),
     );

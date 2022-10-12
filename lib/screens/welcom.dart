@@ -27,8 +27,8 @@ class Welcom extends StatelessWidget {
                 height: 414,
                 child: Align(
                   alignment: Alignment.center,
-                  child: SvgPicture.network(
-                    "https://developer.kin.org/c56b1129.svg",
+                  child: SvgPicture.asset(
+                    "assets/kin-logo-violet-aboveicon.svg",
                     color: kPurpleKin,
                   ),
                 ),
@@ -47,7 +47,7 @@ class Welcom extends StatelessWidget {
                             color: Colors.white),
                       ),
                       TextSpan(
-                        text: "KIN",
+                        text: "Kin",
                         style: TextStyle(
                             fontSize: 36.0,
                             fontWeight: FontWeight.w600,
@@ -134,22 +134,13 @@ class Welcom extends StatelessWidget {
                                 });
                               }
                             },
-                            child: Container(
-                              width: 152,
-                              height: 53,
-                              decoration: const BoxDecoration(
-                                  color: kPurpleKin,
-                                  //  border: Border.all(width: 2.2, color: kPurpleKin),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12))),
-                              child: const Center(
-                                child: Text(
-                                  "Create Wallet",
-                                  style: TextStyle(
-                                      fontSize: 17.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white),
-                                ),
+                            child: const Center(
+                              child: Text(
+                                "Create Wallet",
+                                style: TextStyle(
+                                    fontSize: 17.0,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white),
                               ),
                             ),
                           ),

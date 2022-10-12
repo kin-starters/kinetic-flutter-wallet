@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-const Color kBcgrndColor = Color(0xff16171D);
-const Color kPurpleKin = Color(0xff6F41E7);
-const Color kGrey = Color(0xff21242D);
+const Color kBcgrndColor = Color(0xff211d30);
+const Color kPurpleKin = Color(0xff7546f6);
+const Color kGrey = Color(0xff292638);
 const Color kLighGrey = Color(0xffA7AEBF);
 const Color kDarkGrey = Color(0xff272727);
 showLoadingDialog(BuildContext context) {
@@ -139,7 +139,7 @@ showModalButtom(
                   ...widgets!,
                   const Spacer(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width - 150,
+                    width: MediaQuery.of(context).size.width - 100,
                     height: 53,
                     child: ElevatedButton(
                       style: OutlinedButton.styleFrom(
@@ -149,22 +149,13 @@ showModalButtom(
                       onPressed: () async {
                         callback();
                       },
-                      child: Container(
-                        width: 152,
-                        height: 53,
-                        decoration: const BoxDecoration(
-                            color: kPurpleKin,
-                            //  border: Border.all(width: 2.2, color: kPurpleKin),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(12))),
-                        child: Center(
-                          child: Text(
-                            buttonTex,
-                            style: const TextStyle(
-                                fontSize: 17.0,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white),
-                          ),
+                      child: Center(
+                        child: Text(
+                          buttonTex,
+                          style: const TextStyle(
+                              fontSize: 17.0,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white),
                         ),
                       ),
                     ),

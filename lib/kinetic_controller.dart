@@ -27,8 +27,7 @@ class KineticController extends ChangeNotifier {
   BalanceResponse? get balanceResponse => _balanceResponse;
   List<HistoryResponse>? get history => _history ?? null;
   Transaction? get currentTransaction => _currentTransaction ?? null;
-  RequestAirdropResponse? get requestAirdropResponse =>
-      _requestAirdropResponse ?? null;
+  RequestAirdropResponse? get requestAirdropResponse => _requestAirdropResponse ?? null;
   List<String> get kp {
     if (_kp == null) getKeyPair();
     return _kp!.mnemonic!.split(' ');
@@ -92,7 +91,7 @@ class KineticController extends ChangeNotifier {
     await _generateKeyPair();
     CreateAccountOptions options = CreateAccountOptions(
       owner: _kp!,
-      commitment: CreateAccountRequestCommitmentEnum.finalized,
+      commitment: Commitment.finalized,
       referenceId: 'dart',
       referenceType: 'test',
     );
@@ -178,7 +177,7 @@ class KineticController extends ChangeNotifier {
       MakeTransferOptions options = MakeTransferOptions(
         amount: amount.toString(),
         destination: destinationAddress,
-        commitment: MakeTransferRequestCommitmentEnum.finalized,
+        commitment: Commitment.finalized,
         owner: _kp!,
         referenceId: "our-ref-id",
         referenceType: "some-tx",
@@ -210,7 +209,7 @@ class KineticController extends ChangeNotifier {
       RequestAirdropOptions options = RequestAirdropOptions(
         account: _kp!.publicKey,
         amount: amount.toString(),
-        commitment: RequestAirdropRequestCommitmentEnum.finalized,
+        commitment: Commitment.finalized,
       );
       RequestAirdropResponse? res = await _sdk!.requestAirdrop(options);
       if (res == null) {
@@ -226,11 +225,7 @@ class KineticController extends ChangeNotifier {
 
   //keyPair serializer
   Map<String, dynamic> _keyPairToJson(Keypair keypair) {
-    return {
-      'secretKey': keypair.secretKey,
-      'publicKey': keypair.publicKey,
-      'mnemonic': keypair.mnemonic ?? ""
-    };
+    return {'secretKey': keypair.secretKey, 'publicKey': keypair.publicKey, 'mnemonic': keypair.mnemonic ?? ""};
   }
 
   Future<Keypair> _keypairFromJson(Map<String, dynamic> jsonKeyPair) async {

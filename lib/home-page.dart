@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:kin_app_sample/constants.dart';
 import 'package:kin_app_sample/kinetic_controller.dart';
 import 'package:kin_app_sample/screens/welcom.dart';
-import 'package:kinetic/generated/lib/api.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,7 +23,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String publicKey = "";
   @override
   void initState() {
-    _InitialiseHome();
+    _initializeHome();
     checkIsWalletAvailable();
     super.initState();
   }
@@ -45,12 +44,11 @@ class _MyHomePageState extends State<MyHomePage> {
     } catch (e) {}
   }
 
-  _InitialiseHome() async {
+  _initializeHome() async {
     await controller.getBalance().then((_) {
       if (mounted) {
         setState(() {
-          balance = (int.parse(controller.balanceResponse!.balance) / 100000)
-              .toString();
+          balance = (controller.balanceResponse!.balance).toString();
 
           publicKey = controller.publicKey!.publicKey;
         });
@@ -68,13 +66,11 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         title: const Text(
           "Home",
-          style: TextStyle(
-              fontSize: 19, fontWeight: FontWeight.w600, color: Colors.white),
+          style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600, color: Colors.white),
         ),
       ),
       backgroundColor: kBcgrndColor,
-      body: Center(child:
-          Consumer<KineticController>(builder: (_, kineticController, __) {
+      body: Center(child: Consumer<KineticController>(builder: (_, kineticController, __) {
         return Column(children: [
           SizedBox(
             height: 36,
@@ -94,8 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           final delete = await kineticController.deleteWallet();
                           if (delete == true) {
                             Future.delayed(Duration.zero).then((value) {
-                              Navigator.pushNamedAndRemoveUntil(
-                                  context, Welcom.pageId, (route) => false);
+                              Navigator.pushNamedAndRemoveUntil(context, Welcom.pageId, (route) => false);
                             });
                           } else {
                             Future.delayed(Duration.zero).then((value) {
@@ -157,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          "KIN Balance\n",
+                          " Kin Balance\n",
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
@@ -165,7 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               color: kDarkGrey),
                         ),
                         Text(
-                          _parseBalence(kineticController.balanceResponse),
+                          balance,
                           style: const TextStyle(
                               fontSize: 35.0,
                               fontWeight: FontWeight.w600,
@@ -194,9 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () {
                     showModalButtom(context, 250, () async {
                       showLoadingDialog(context);
-                      await kineticController
-                          .fund(int.parse(fundTEC.text.toString()))
-                          .then((_) {
+                      await kineticController.fund(int.parse(fundTEC.text.toString())).then((_) {
                         setState(() {
                           fundTEC = TextEditingController();
                         });
@@ -207,21 +200,18 @@ class _MyHomePageState extends State<MyHomePage> {
                           });
                         } else {
                           Future.delayed(Duration.zero).then((value) {
-                            showErrorDialog(
-                                context, "Error requesting Air drop");
+                            showErrorDialog(context, "Error requesting Air drop");
                           });
                         }
                       });
-                    }, "Confirm", "Amount", fundTEC, TextInputType.number,
-                        widgets: []);
+                    }, "Confirm", "Amount", fundTEC, TextInputType.number, widgets: []);
                   },
                   child: Container(
                     height: 80,
                     width: 140,
                     decoration: BoxDecoration(
                         color: kGrey,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(12)),
+                        borderRadius: const BorderRadius.all(Radius.circular(12)),
                         boxShadow: [
                           BoxShadow(
                             offset: const Offset(3, 8),
@@ -252,9 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     showModalButtom(context, 400, () async {
                       showLoadingDialog(context);
                       await kineticController
-                          .transfer(
-                              int.parse(transferAmountTEC.text.toString()),
-                              transferToTEC.text.toString())
+                          .transfer(int.parse(transferAmountTEC.text.toString()), transferToTEC.text.toString())
                           .then((_) {
                         if (kineticController.currentTransaction != null) {
                           setState(() {
@@ -267,78 +255,66 @@ class _MyHomePageState extends State<MyHomePage> {
                           });
                         } else {
                           Future.delayed(Duration.zero).then((value) {
-                            showErrorDialog(
-                                context, "Error requesting Air drop");
+                            showErrorDialog(context, "Error requesting Air drop");
                           });
                         }
                       });
-                    }, "Confirm", "Transfer to", transferToTEC,
-                        TextInputType.text,
-                        widgets: [
-                          const SizedBox(
-                            height: 18,
+                    }, "Confirm", "Transfer to", transferToTEC, TextInputType.text, widgets: [
+                      const SizedBox(
+                        height: 18,
+                      ),
+                      const Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Transfer amount",
+                          style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600, color: Colors.white),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 18,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 50,
+                        ),
+                        child: TextFormField(
+                          enabled: true,
+                          controller: transferAmountTEC,
+                          onChanged: (value) {},
+                          keyboardType: TextInputType.number,
+                          maxLines: null,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
                           ),
-                          const Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Transfer amount",
-                              style: TextStyle(
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white),
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.only(left: 15, top: 4, bottom: 15),
+                            fillColor: kGrey,
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: kPurpleKin, width: 1),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 18,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 50,
+                            disabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: kPurpleKin, width: 1),
                             ),
-                            child: TextFormField(
-                              enabled: true,
-                              controller: transferAmountTEC,
-                              onChanged: (value) {},
-                              keyboardType: TextInputType.number,
-                              maxLines: null,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                color: Colors.white,
-                              ),
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.only(
-                                    left: 15, top: 4, bottom: 15),
-                                fillColor: kGrey,
-                                filled: true,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: const BorderSide(
-                                      color: kPurpleKin, width: 1),
-                                ),
-                                disabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: const BorderSide(
-                                      color: kPurpleKin, width: 1),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: const BorderSide(
-                                      color: kPurpleKin, width: 1),
-                                ),
-                                floatingLabelAlignment:
-                                    FloatingLabelAlignment.start,
-                              ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: kPurpleKin, width: 1),
                             ),
+                            floatingLabelAlignment: FloatingLabelAlignment.start,
                           ),
-                        ]);
+                        ),
+                      ),
+                    ]);
                   },
                   child: Container(
                     height: 80,
                     width: 140,
                     decoration: BoxDecoration(
                         color: kGrey,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(12)),
+                        borderRadius: const BorderRadius.all(Radius.circular(12)),
                         boxShadow: [
                           BoxShadow(
                             offset: const Offset(3, 8),
@@ -402,48 +378,24 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  _parseBalence(BalanceResponse? thisBalance) {
-    if (thisBalance == null) {
-      if (balance != "") {
-        if (balance[0] != '0') {
-          return (double.parse(balance)).toString();
-        }
-      }
-      return balance;
-    } else {
-      if (thisBalance.balance[0] != '0') {
-        return (double.parse(thisBalance.balance) / 100000).toString();
-      } else {
-        return thisBalance.balance;
-      }
-    }
-  }
-
   _handleExitButton(Function callback) {
     showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             backgroundColor: kGrey,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8.0))),
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
             title: const Text(
               "Wallet Exit",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white),
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.white),
             ),
             actions: [
               const Center(
                 child: Text(
                   "Are you sure you want to exit your wallet?",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white),
+                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.white),
                 ),
               ),
               const SizedBox(
@@ -457,19 +409,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         callback();
                       },
                       child: const Text("Exit Wallet",
-                          style: TextStyle(
-                              fontSize: 17.0,
-                              fontWeight: FontWeight.w600,
-                              color: kPurpleKin))),
+                          style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w600, color: kPurpleKin))),
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
                     child: const Text("Cancel",
-                        style: TextStyle(
-                            fontSize: 17.0,
-                            fontWeight: FontWeight.w600,
-                            color: kPurpleKin)),
+                        style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w600, color: kPurpleKin)),
                   ),
                 ],
               )
